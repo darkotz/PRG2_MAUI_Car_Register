@@ -24,9 +24,7 @@
                 listViewVehicles.ItemsSource = null;
                 listViewVehicles.ItemsSource = vehicleList;
 
-                entryRegistrationNumber.Text = string.Empty;
-                entryManufacturer.Text = string.Empty;
-                entryModel.Text = string.Empty;
+                ClearTextFields();
             }
 
             // här "fångas" eventuella felmeddelanden från Vehicle
@@ -40,7 +38,7 @@
         {
             if (e.Value != true) return;
 
-            // Skapa en filtrerad lista baserat på vilken radioknapp som är vald
+            // Skapa en temporär filtrerad lista baserat på vilken radioknapp som är vald
             List<Vehicle> filteredList;
 
             if (radioCar.IsChecked)
@@ -90,5 +88,11 @@
             }
         }
 
+        private void ClearTextFields()
+        {
+            entryRegistrationNumber.Text = string.Empty;
+            entryManufacturer.Text = string.Empty;
+            entryModel.Text = string.Empty;
+        }
     }
 }

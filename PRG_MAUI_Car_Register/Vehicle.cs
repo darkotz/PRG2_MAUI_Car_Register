@@ -22,25 +22,28 @@
 
             set
             {
-                if (value.Length == 6)
+                if (!String.IsNullOrWhiteSpace(value))
                 {
-                    for (int i = 0; i < 3; i++)
+                    if (value.Length == 6)
                     {
-                        if (!char.IsLetter(value[i]))
-                            throw new ArgumentException("Inkorret registreringsnummer: De första tre tecknen måste vara bokstäver.");
-                    }
-
-                    for (int i = 3; i < 6; i++)
-                    {
-                        if (i < 5)
+                        for (int i = 0; i < 3; i++)
                         {
-                            if (!char.IsDigit(value[i]))
-                                throw new ArgumentException("Inkorret registreringsnummer: Det fjärde och femte tecknet måste vara siffror.");
+                            if (!char.IsLetter(value[i]))
+                                throw new ArgumentException("Inkorret registreringsnummer: De första tre tecknen måste vara bokstäver.");
                         }
-                        else
+
+                        for (int i = 3; i < 6; i++)
                         {
-                            if (!char.IsDigit(value[i]) && !char.IsLetter(value[i]))
-                                throw new ArgumentException("Inkorret registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
+                            if (i < 5)
+                            {
+                                if (!char.IsDigit(value[i]))
+                                    throw new ArgumentException("Inkorret registreringsnummer: Det fjärde och femte tecknet måste vara siffror.");
+                            }
+                            else
+                            {
+                                if (!char.IsDigit(value[i]) && !char.IsLetter(value[i]))
+                                    throw new ArgumentException("Inkorret registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
+                            }
                         }
                     }
                 }
