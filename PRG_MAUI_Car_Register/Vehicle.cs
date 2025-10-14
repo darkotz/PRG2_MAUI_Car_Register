@@ -74,10 +74,8 @@
             set { this.manufacturer = value; }
         }
 
-        //TODO Att spara årsmodell ska möjliggöras, ska valideras, sparas i objektet och visas i UI
+        //TODO Lägg till möjligheten att spara årsmodell, validera, spara och visa i objektet och visas i UI
 
-
-        // Klassens  eventuella övriga metoder brukar finnas här, här en override av ToString()
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()

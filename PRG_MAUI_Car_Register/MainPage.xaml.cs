@@ -16,8 +16,7 @@
             {
                 Vehicle vehicle = new Vehicle((Vehicle.Type)pickerType.SelectedIndex);
 
-                string regNr = entryRegistrationNumber.Text;
-                vehicle.RegistrationNumber = regNr;
+                vehicle.RegistrationNumber = entryRegistrationNumber.Text; ;
                 vehicle.Manufacturer = entryManufacturer.Text;
                 vehicle.Model = entryModel.Text;
 
@@ -29,6 +28,8 @@
                 entryManufacturer.Text = string.Empty;
                 entryModel.Text = string.Empty;
             }
+
+            // här "fångas" eventuella felmeddelanden från Vehicle
             catch (ArgumentException ex)
             {
                 DisplayAlert("Fel", ex.Message, "OK");
