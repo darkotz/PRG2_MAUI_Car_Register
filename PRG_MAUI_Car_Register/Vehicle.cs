@@ -29,7 +29,7 @@
                         for (int i = 0; i < 3; i++)
                         {
                             if (!char.IsLetter(value[i]))
-                                throw new ArgumentException("Inkorret registreringsnummer: De första tre tecknen måste vara bokstäver.");
+                                throw new ArgumentException("Inkorrekt registreringsnummer: De första tre tecknen måste vara bokstäver.");
                         }
 
                         for (int i = 3; i < 6; i++)
@@ -37,12 +37,12 @@
                             if (i < 5)
                             {
                                 if (!char.IsDigit(value[i]))
-                                    throw new ArgumentException("Inkorret registreringsnummer: Det fjärde och femte tecknet måste vara siffror.");
+                                    throw new ArgumentException("Inkorrekt registreringsnummer: Det fjärde och femte tecknet måste vara siffror.");
                             }
                             else
                             {
                                 if (!char.IsDigit(value[i]) && !char.IsLetter(value[i]))
-                                    throw new ArgumentException("Inkorret registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
+                                    throw new ArgumentException("Inkorrekt registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
                             }
                         }
                     }
@@ -77,7 +77,7 @@
             set { this.manufacturer = value; }
         }
 
-        //TODO Lägg till möjligheten att spara årsmodell, validera, spara och visa i objektet och visas i UI
+        //TODO Lägg till möjligheten att spara realistisk årsmodell, validera, spara och visa i objektet och visas i UI. Tips: Regex.IsMatch()
 
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
