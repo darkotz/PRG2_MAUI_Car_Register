@@ -1,4 +1,6 @@
-﻿namespace PRG_MAUI_Car_Register
+﻿using System.Text.RegularExpressions;
+
+namespace PRG_MAUI_Car_Register
 {
     class Vehicle
     {
@@ -9,7 +11,7 @@
         private string manufacturer = string.Empty;
         private string model = string.Empty;
 
-        private int year = 0;
+        private string year = string.Empty;
 
         // Konstruktor (en metod med samma namn som klassen, som returnerar ett objekt)
         public Vehicle(Type vehicleType) // en konstruktor kan, men måste inte, ta parametrar
@@ -100,14 +102,39 @@
         //TODO Lägg till möjligheten att spara realistisk årsmodell, validera, spara och visa i objektet och visas i UI. Tips: Regex.IsMatch()
         public string YearModel {
             get { return year; }
-            set { this.year = value; }
+            set {
+
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Årsmodell får inte vara tomt.");
+
+                }
+                if (!Regex.IsMatch(value, "^[1-2][0-9][0-9][0-9]$"))
+                {
+                    throw new ArgumentException("Årsmodell måste vara fyra siffror. T.ex 2011.");
+                }
+
+                int enteredYear = int.Parse(value);
+                int currentYear = DateTime.Now.Year;
+
+                if (enteredYear < 1895)
+                {
+                    throw new ArgumentException("Tidigare modeller än 1895 kan inte registrerars.");
+                }
+                if (enteredYear > currentYear)
+                {
+                    throw new ArgumentException("Årsmodell kan inte vara i framtiden.");
+                }
+
+
+                this.year = value; }
 
         }
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()
         {
-            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model;
+            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model + "\t" + this.year;
         }
     }
 }
