@@ -9,6 +9,8 @@
         private string manufacturer = string.Empty;
         private string model = string.Empty;
 
+        private int year = 0;
+
         // Konstruktor (en metod med samma namn som klassen, som returnerar ett objekt)
         public Vehicle(Type vehicleType) // en konstruktor kan, men måste inte, ta parametrar
         {
@@ -63,22 +65,44 @@
             set { this.vehicleType = value; }
         }
 
-        //TODO Tillverkare ska valideras, sparas i objektet och visas i UI
+        //TODO Tillverkare ska valideras, sparas i objektet och visas i UI == DONE
         public string Model
         {
             get { return model; }
-            set { this.model = value; }
+
+            set {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Modell får inte vara tomt.");
+                }
+                this.model = value;
+                
+            }
+                
+                
         }
 
-        //TODO Modell ska valideras, sparas i objektet och visas i UI
+        //TODO Modell ska valideras, sparas i objektet och visas i UI == DONE
         public string Manufacturer
         {
             get { return manufacturer; }
-            set { this.manufacturer = value; }
+            set {
+                if (string.IsNullOrWhiteSpace(value)){
+                    throw new ArgumentException("Tillverkare får inte vara tomt.");
+                }
+                this.manufacturer = value;
+                
+            }
+
+               
         }
 
         //TODO Lägg till möjligheten att spara realistisk årsmodell, validera, spara och visa i objektet och visas i UI. Tips: Regex.IsMatch()
+        public string YearModel {
+            get { return year; }
+            set { this.year = value; }
 
+        }
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()
