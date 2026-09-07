@@ -77,6 +77,14 @@ namespace PRG_MAUI_Car_Register
                 {
                     throw new ArgumentException("Modell får inte vara tomt.");
                 }
+                foreach(char i in value)
+                {
+                    if(!char.IsLetterOrDigit(i) && i != ' ' && i != '-')
+                    {
+                        throw new ArgumentException($"Modellen får inte innehålla tecknet '{i}'. " +
+                                     "Endast bokstäver, siffror, mellanslag och bindestreck är tillåtna.");
+                    }
+                }
                 this.model = value;
                 
             }
