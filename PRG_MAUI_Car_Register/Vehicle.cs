@@ -100,6 +100,13 @@ namespace PRG_MAUI_Car_Register
                 if (string.IsNullOrWhiteSpace(value)){
                     throw new ArgumentException("Tillverkare får inte vara tomt.");
                 }
+                foreach(char i in value)
+                {
+                    if (!char.IsLetterOrDigit(i)){
+                        throw new ArgumentException("Ett märke ska inte kunna bestå av icke relevanta symboler");
+                    }
+                }
+
                 this.manufacturer = value;
                 
             }
