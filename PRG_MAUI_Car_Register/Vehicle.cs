@@ -26,10 +26,15 @@ namespace PRG_MAUI_Car_Register
 
             set
             {
-                if (!String.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    if (value.Length == 6)
-                    {
+                    throw new ArgumentException("Ett registreringsnummer får inte vara tomt.");
+                }
+                if(value.Length != 6)
+                {
+                    throw new ArgumentException("Ett registreringsnummer måste bestå av exakt 6 tecken");
+                }
+
                         for (int i = 0; i < 3; i++)
                         {
                             if (!char.IsLetter(value[i]))
@@ -49,12 +54,6 @@ namespace PRG_MAUI_Car_Register
                                     throw new ArgumentException("Inkorrekt registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
                             }
                         }
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Ett registreringsnummer måste bestå av exakt 6 tecken, med tre bokstäver följt av två siffror och en siffra eller bokstav.");
-                }
 
                 registrationNumber = value.ToUpper();
             }
@@ -102,8 +101,8 @@ namespace PRG_MAUI_Car_Register
                 }
                 foreach(char i in value)
                 {
-                    if (!char.IsLetterOrDigit(i)){
-                        throw new ArgumentException("Ett märke ska inte kunna bestå av icke relevanta symboler");
+                    if (!char.IsLetterOrDigit(i) && i!= ' ' && i != '-'){
+                        throw new ArgumentException("Ett märke ska inte kunna bestå av icke relevanta symboler, bara '-' eller mellanslag");
                     }
                 }
 
