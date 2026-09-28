@@ -1,4 +1,6 @@
-﻿namespace PRG_MAUI_Car_Register
+﻿using System.Text.RegularExpressions;
+
+namespace PRG_MAUI_Car_Register
 {
     class Vehicle
     {
@@ -8,6 +10,8 @@
         private string registrationNumber = string.Empty;
         private string manufacturer = string.Empty;
         private string model = string.Empty;
+
+        private string year = string.Empty;
 
         // Konstruktor (en metod med samma namn som klassen, som returnerar ett objekt)
         public Vehicle(Type vehicleType) // en konstruktor kan, men måste inte, ta parametrar
@@ -22,10 +26,15 @@
 
             set
             {
-                if (!String.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    if (value.Length == 6)
-                    {
+                    throw new ArgumentException("Ett registreringsnummer får inte vara tomt.");
+                }
+                if(value.Length != 6)
+                {
+                    throw new ArgumentException("Ett registreringsnummer måste bestå av exakt 6 tecken");
+                }
+
                         for (int i = 0; i < 3; i++)
                         {
                             if (!char.IsLetter(value[i]))
@@ -45,12 +54,6 @@
                                     throw new ArgumentException("Inkorrekt registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
                             }
                         }
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Ett registreringsnummer måste bestå av exakt 6 tecken, med tre bokstäver följt av två siffror och en siffra eller bokstav.");
-                }
 
                 registrationNumber = value.ToUpper();
             }
@@ -63,27 +66,89 @@
             set { this.vehicleType = value; }
         }
 
-        //TODO Tillverkare ska valideras, sparas i objektet och visas i UI
+        //TODO Tillverkare ska valideras, sparas i objektet och visas i UI == DONE
         public string Model
         {
             get { return model; }
-            set { this.model = value; }
+
+            set {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Modell får inte vara tomt.");
+                }
+                foreach(char i in value)
+                {
+                    if(!char.IsLetterOrDigit(i) && i != ' ' && i != '-')
+                    {
+                        throw new ArgumentException($"Modellen får inte innehålla tecknet '{i}'. " +
+                                     "Endast bokstäver, siffror, mellanslag och bindestreck är tillåtna.");
+                    }
+                }
+                this.model = value;
+                
+            }
+                
+                
         }
 
-        //TODO Modell ska valideras, sparas i objektet och visas i UI
+        //TODO Modell ska valideras, sparas i objektet och visas i UI == DONE
         public string Manufacturer
         {
             get { return manufacturer; }
-            set { this.manufacturer = value; }
+            set {
+                if (string.IsNullOrWhiteSpace(value)){
+                    throw new ArgumentException("Tillverkare får inte vara tomt.");
+                }
+                foreach(char i in value)
+                {
+                    if (!char.IsLetterOrDigit(i) && i!= ' ' && i != '-'){
+                        throw new ArgumentException("Ett märke ska inte kunna bestå av icke relevanta symboler, bara '-' eller mellanslag");
+                    }
+                }
+
+                this.manufacturer = value;
+                
+            }
+
+               
         }
 
         //TODO Lägg till möjligheten att spara realistisk årsmodell, validera, spara och visa i objektet och visas i UI. Tips: Regex.IsMatch()
+        public string YearModel {
+            get { return year; }
+            set {
 
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Årsmodell får inte vara tomt.");
+
+                }
+                if (!Regex.IsMatch(value, "^[1-2][0-9][0-9][0-9]$"))
+                {
+                    throw new ArgumentException("Årsmodell måste vara fyra siffror. T.ex 2011.");
+                }
+
+                int enteredYear = int.Parse(value);
+                int currentYear = DateTime.Now.Year;
+
+                if (enteredYear < 1895)
+                {
+                    throw new ArgumentException("Tidigare modeller än 1895 kan inte registrerars.");
+                }
+                if (enteredYear > currentYear)
+                {
+                    throw new ArgumentException("Årsmodell kan inte vara i framtiden.");
+                }
+
+
+                this.year = value; }
+
+        }
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()
         {
-            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model;
+            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model + "\t" + this.year;
         }
     }
 }
