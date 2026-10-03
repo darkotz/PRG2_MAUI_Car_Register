@@ -1,20 +1,33 @@
-﻿namespace PRG_MAUI_Car_Register
+﻿using System.Collections.ObjectModel;
+using PRG_MAUI_Car_Register.Model;
+
+
+namespace PRG_MAUI_Car_Register.View
 {
     public partial class MainPage : ContentPage
     {
-        List<Vehicle> vehicleList = new List<Vehicle>();
+        private ObservableCollection<Vehicle> vehicleList = new ObservableCollection<Vehicle>();
+
 
         public MainPage()
         {
             InitializeComponent();
             pickerType.SelectedIndex = 0;
+            listViewVehicles.ItemsSource = vehicleList;
         }
+
 
         private void OnRegisterClicked(object sender, EventArgs e)
         {
             try
             {
-                Vehicle vehicle = new Vehicle((Vehicle.Type)pickerType.SelectedIndex);
+                Vehicle vehicle = pickerType.SelectedIndex switch
+                {
+                    0 => new Car(),
+                    1 => new MC(),
+                    2 => new Truck(),
+                    _ => throw new InvalidOperationException("Ogiltig typ vald"),
+                };
 
                 vehicle.RegistrationNumber = entryRegistrationNumber.Text;
                 vehicle.Manufacturer = entryManufacturer.Text;
@@ -22,13 +35,9 @@
                 vehicle.YearModel = entryYear.Text;
 
                 vehicleList.Add(vehicle);
-                listViewVehicles.ItemsSource = null;
-                listViewVehicles.ItemsSource = vehicleList;
 
                 ClearTextFields();
             }
-
-            // här "fångas" eventuella felmeddelanden från Vehicle
             catch (ArgumentException ex)
             {
                 DisplayAlert("Fel", ex.Message, "OK");
@@ -39,24 +48,23 @@
         {
             if (e.Value != true) return;
 
-            // Skapa en temporär filtrerad lista baserat på vilken radioknapp som är vald
-            List<Vehicle> filteredList;
+            IEnumerable<Vehicle> filteredList;
 
             if (radioCar.IsChecked)
             {
-                filteredList = vehicleList.Where(v => v.VehicleType == Vehicle.Type.Bil).ToList();
+                filteredList = vehicleList.OfType<Car>();
             }
             else if (radioMC.IsChecked)
             {
-                filteredList = vehicleList.Where(v => v.VehicleType == Vehicle.Type.MC).ToList();
+                filteredList = vehicleList.OfType<MC>();
             }
             else if (radioTruck.IsChecked)
             {
-                filteredList = vehicleList.Where(v => v.VehicleType == Vehicle.Type.Lastbil).ToList();
+                filteredList = vehicleList.OfType<Truck>();
             }
             else
             {
-                // Om "Alla" är vald, visa hela listan
+                
                 filteredList = vehicleList;
             }
 
@@ -77,12 +85,7 @@
 
             if (foundVehicle != null)
             {
-                labelSearchResult.Text = $"Fordon hittat:\n" +
-                                         $"Registreringsnummer: {foundVehicle.RegistrationNumber}\n" +
-                                         $"Tillverkare: {foundVehicle.Manufacturer}\n" +
-                                         $"Modell: {foundVehicle.Model}\n" +
-                                         $"Typ: {foundVehicle.VehicleType}\n" +
-                                         $"Årsmodell: {foundVehicle.YearModel}\n";
+                labelSearchResult.Text = $"Fordon hittat: \n{foundVehicle.GetDescription()}\n";
             }
             else
             {
